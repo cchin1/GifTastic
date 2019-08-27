@@ -2,7 +2,7 @@
 UW Coding Bootcamp 06-Homework GifTastic
 
 ## Technologies Used
-HTML, Javascript, jQuery
+HTML, Javascript, jQuery, GIPHY API, AJAX calls
 
 ## Installation
 Nothing special here.  Just check it out using your favorite web browser.
@@ -11,7 +11,6 @@ Nothing special here.  Just check it out using your favorite web browser.
 Watch the demo.  https://www.youtube.com/watch?v=BqreERTLjgQ&feature=youtu.be
 
 Here's how the game works:
-
 In this assignment, you'll use the GIPHY API to make a dynamic web page that populates with gifs of your choice. To finish this task, you must call the GIPHY API and use JavaScript and jQuery to change the HTML of your site.
 
 ## Original Instructions
