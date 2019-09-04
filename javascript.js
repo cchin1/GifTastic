@@ -4,7 +4,7 @@ $(function(){
 })
 
 //Create an array of dangers you find as a trail runner
-var searchArray = ['Cougar', 'Bear', 'Rattlesnake'];
+var searchArray = ['Mountain Lion', 'Bear', 'Rattlesnake'];
 
 //Create buttons for each item in searchArray
 function populateButtons(searchArray,classToAdd,areaToAddTo){
@@ -18,10 +18,11 @@ function populateButtons(searchArray,classToAdd,areaToAddTo){
     }
 }
 //Upon button click, modify the API call with the object
-$(document).on('click','.searchButton',function(){
-    $('#searches').empty();
-    var type = $(this).data('type');
-    var queryURL = "https://api.giphy.com/v1/gifs/search?q= '+type+' &api_key=BxmboH1i1EQxazIZjHH8PVmD7QPgF4Fu";
+$(document).on('click','#searchButton',function(){
+    $('#giffies').empty();
+    var searchInputNode = $("#search-input");
+    var searchText = searchInputNode[0].value; // really? it's an array???
+    var queryURL = "https://api.giphy.com/v1/gifs/search?q=" + searchText + "&api_key=BxmboH1i1EQxazIZjHH8PVmD7QPgF4Fu";
     $.ajax({url:queryURL,method:'GET'})
         .done(function(response){
             for(var i=0;i<response.data.length;i++){
@@ -38,9 +39,12 @@ $(document).on('click','.searchButton',function(){
                 image.addClass('searchImage');
                 searchDiv.append(p);
                 searchDiv.append(image);
-                $('#searches').append(searchDiv);
+                $('#giffies').append(searchDiv);
             }
         })
+        .fail(function (jqXHR,status,err) {
+            console.log(err, status);
+        });
 })
 
 //Make the gifs animate and still upon clicks
@@ -57,7 +61,7 @@ $(document).on('click','.searchImage',function(){
 
 //Create new button for search input
 $('#addSearch').on('click',function(){
-    var newSearch = $('input').eq(0).val();
+    var newSearch = $('input').eq(0).val().trim();
     searchArray.push(newSearch);
     populateButtons(searchArray,'searchButton','#buttonsArea');
     return false;
