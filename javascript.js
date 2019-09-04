@@ -19,12 +19,48 @@ function populateButtons(searchArray,classToAdd,areaToAddTo){
 }
 //Upon button click, modify the API call with the object
 $(document).on('click','.searchButton',function(){
+    $('#searches').empty();
     var type = $(this).data('type');
-    var queryURL = "https://api.giphy.com/v1/gifs/search?q='+type+'&api_key=BxmboH1i1EQxazIZjHH8PVmD7QPgF4Fu";
+    var queryURL = "https://api.giphy.com/v1/gifs/search?q= '+type+' &api_key=BxmboH1i1EQxazIZjHH8PVmD7QPgF4Fu";
     $.ajax({url:queryURL,method:'GET'})
         .done(function(response){
-            console.log(response);
+            for(var i=0;i<response.data.length;i++){
+                var searchDiv = $('<div class="search-item">');
+                var rating = response.data[i].rating;
+                var p = $('<p>').text('Rating: '+rating);
+                var animated = response.data[i].images.fixed_height.url;
+                var still = response.data[i].images.fixed_height_still.url;
+                var image = $('<img>');
+                image.attr('src',still);
+                image.attr('data-still',still);
+                image.attr('data-animated',animated);
+                image.attr('data-state','still');
+                image.addClass('searchImage');
+                searchDiv.append(p);
+                searchDiv.append(image);
+                $('#searches').append(searchDiv);
+            }
         })
+})
+
+//Make the gifs animate and still upon clicks
+$(document).on('click','.searchImage',function(){
+    var state = $(this).attr('data-state');
+    if(state == 'still'){
+        $(this).attr('src', $(this).attr('data-animated'));
+        $(this).attr('data-state','animated');
+    } else {
+        $(this).attr('src', $(this).attr('data-still'));
+        $(this).attr('data-state','still');
+    }
+})
+
+//Create new button for search input
+$('#addSearch').on('click',function(){
+    var newSearch = $('input').eq(0).val();
+    searchArray.push(newSearch);
+    populateButtons(searchArray,'searchButton','#buttonsArea');
+    return false;
 })
 
 /*
@@ -32,26 +68,6 @@ $(document).on('click','.searchButton',function(){
 Api Key:
 BxmboH1i1EQxazIZjHH8PVmD7QPgF4Fu
 
-  <img src="https://media1.giphy.com/media/3o85xkQpyMlnBkpB9C/200_s.gif" data-still="https://media1.giphy.com/media/3o85xkQpyMlnBkpB9C/200_s.gif" data-animate="https://media1.giphy.com/media/3o85xkQpyMlnBkpB9C/200.gif" data-state="still" class="gif">
-  <img src="https://media2.giphy.com/media/8rFQp4kHXJ0gU/200_s.gif" data-still="https://media2.giphy.com/media/8rFQp4kHXJ0gU/200_s.gif" data-animate="https://media2.giphy.com/media/8rFQp4kHXJ0gU/200.gif" data-state="still" class="gif">
-  <img src="https://media3.giphy.com/media/W6LbnBigDe4ZG/200_s.gif" data-still="https://media3.giphy.com/media/W6LbnBigDe4ZG/200_s.gif" data-animate="https://media3.giphy.com/media/W6LbnBigDe4ZG/200.gif" data-state="still" class="gif">
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
-  <script type="text/javascript">
-    $(".gif").on("click", function() {
-      // The attr jQuery method allows us to get or set the value of any attribute on our HTML element
-      var state = $(this).attr("data-state");
-      // If the clicked image's state is still, update its src attribute to what its data-animate value is.
-      // Then, set the image's data-state to animate
-      // Else set src to the data-still value
-      if (state === "still") {
-        $(this).attr("src", $(this).attr("data-animate"));
-        $(this).attr("data-state", "animate");
-      } else {
-        $(this).attr("src", $(this).attr("data-still"));
-        $(this).attr("data-state", "still");
-      }
-    });
-  </script>
 
     <button id="cat-button">magical cat button</button>
     <div id="images">
