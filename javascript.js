@@ -1,6 +1,5 @@
 $(function(){
     populateButtons(searchArray,'searchButton','#buttonsArea');
-    console.log("Page Loaded");
 })
 
 //Create an array of dangers you find as a trail runner
