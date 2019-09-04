@@ -18,11 +18,10 @@ function populateButtons(searchArray,classToAdd,areaToAddTo){
     }
 }
 //Upon button click, modify the API call with the object
-$(document).on('click','#searchButton',function(){
-    $('#giffies').empty();
-    var searchInputNode = $("#search-input");
-    var searchText = searchInputNode[0].value; // really? it's an array???
-    var queryURL = "https://api.giphy.com/v1/gifs/search?q=" + searchText + "&api_key=BxmboH1i1EQxazIZjHH8PVmD7QPgF4Fu";
+$(document).on('click','.searchButton',function(){
+    $('#searches').empty();
+    var type = $(this).data('type');
+    var queryURL = "https://api.giphy.com/v1/gifs/search?q="+encodeURI(type)+"&api_key=BxmboH1i1EQxazIZjHH8PVmD7QPgF4Fu";
     $.ajax({url:queryURL,method:'GET'})
         .done(function(response){
             for(var i=0;i<response.data.length;i++){
@@ -39,7 +38,7 @@ $(document).on('click','#searchButton',function(){
                 image.addClass('searchImage');
                 searchDiv.append(p);
                 searchDiv.append(image);
-                $('#giffies').append(searchDiv);
+                $('#searches').append(searchDiv);
             }
         })
         .fail(function (jqXHR,status,err) {
@@ -60,8 +59,9 @@ $(document).on('click','.searchImage',function(){
 })
 
 //Create new button for search input
-$('#addSearch').on('click',function(){
-    var newSearch = $('input').eq(0).val().trim();
+$('#submitPress').on('click',function(){
+    var searchInput = $('#search-input')
+    var newSearch = searchInput.eq(0).val().trim();
     searchArray.push(newSearch);
     populateButtons(searchArray,'searchButton','#buttonsArea');
     return false;
